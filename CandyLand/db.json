@@ -1,0 +1,167 @@
+[
+  {
+    "model": "candy.category",
+    "pk": 1,
+    "fields": {
+      "title": "Карамель",
+      "slug": "caramel",
+      "output_order": 100,
+      "is_published": true
+    }
+  },
+  {
+    "model": "candy.category",
+    "pk": 2,
+    "fields": {
+      "title": "Шоколад",
+      "slug": "chocolate",
+      "output_order": 100,
+      "is_published": true
+    }
+  },
+  {
+    "model": "candy.category",
+    "pk": 3,
+    "fields": {
+      "title": "Мармелад",
+      "slug": "marmelade",
+      "output_order": 100,
+      "is_published": true
+    }
+  },
+
+  {
+    "model": "candy.candies",
+    "pk": 1,
+    "fields": {
+      "title": "Золотая тянучка",
+      "description": "Мягкая карамель с нежной текстурой и лёгким медовым ароматом",
+      "category": 1,
+      "is_published": true,
+      "is_on_main": true
+    }
+  },
+  {
+    "model": "candy.candies",
+    "pk": 2,
+    "fields": {
+      "title": "Медовая нить",
+      "description": "Тягучая карамель с насыщенным вкусом натурального мёда и сливок",
+      "category": 1,
+      "is_published": true,
+      "is_on_main": true
+    }
+  },
+  {
+    "model": "candy.candies",
+    "pk": 3,
+    "fields": {
+      "title": "Карамельный вихрь",
+      "description": "Нежная сладость с глубоким карамельным вкусом и приятной тянущейся структурой",
+      "category": 1,
+      "is_published": true,
+      "is_on_main": true
+    }
+  },
+  {
+    "model": "candy.candies",
+    "pk": 4,
+    "fields": {
+      "title": "Янтарная сладость",
+      "description": "Классическая карамель с мягким вкусом и лёгкими нотками жжёного сахара",
+      "category": 1,
+      "is_published": true,
+      "is_on_main": true
+    }
+  },
+
+  {
+    "model": "candy.candies",
+    "pk": 5,
+    "fields": {
+      "title": "Бархатный шоколад",
+      "description": "Нежный шоколад с мягкой текстурой и насыщенным вкусом какао",
+      "category": 2,
+      "is_published": true,
+      "is_on_main": true
+    }
+  },
+  {
+    "model": "candy.candies",
+    "pk": 6,
+    "fields": {
+      "title": "Тёмная классика",
+      "description": "Глубокий вкус тёмного шоколада с лёгкой горчинкой и ароматом какао",
+      "category": 2,
+      "is_published": true,
+      "is_on_main": true
+    }
+  },
+  {
+    "model": "candy.candies",
+    "pk": 7,
+    "fields": {
+      "title": "Шоколадный аккорд",
+      "description": "Гармоничное сочетание сладости и какао с мягким послевкусием",
+      "category": 2,
+      "is_published": true,
+      "is_on_main": true
+    }
+  },
+  {
+    "model": "candy.candies",
+    "pk": 8,
+    "fields": {
+      "title": "Какао-делюкс",
+      "description": "Плотный шоколад с богатым вкусом какао и нежной кремовой текстурой",
+      "category": 2,
+      "is_published": true,
+      "is_on_main": true
+    }
+  },
+
+  {
+    "model": "candy.candies",
+    "pk": 9,
+    "fields": {
+      "title": "Фруктовый микс",
+      "description": "Яркое ассорти мармелада с насыщенными фруктовыми вкусами и лёгкой сладостью",
+      "category": 3,
+      "is_published": true,
+      "is_on_main": true
+    }
+  },
+  {
+    "model": "candy.candies",
+    "pk": 10,
+    "fields": {
+      "title": "Ягодное ассорти",
+      "description": "Мармелад с богатым вкусом спелых ягод и мягкой желейной текстурой",
+      "category": 3,
+      "is_published": true,
+      "is_on_main": true
+    }
+  },
+  {
+    "model": "candy.candies",
+    "pk": 11,
+    "fields": {
+      "title": "Цитрусовый мармелад",
+      "description": "Освежающий вкус цитрусов с лёгкой кислинкой и приятной сладостью",
+      "category": 3,
+      "is_published": true,
+      "is_on_main": true
+    }
+  },
+  {
+    "model": "candy.candies",
+    "pk": 12,
+    "fields": {
+      "title": "Летний вкус",
+      "description": "Лёгкий фруктовый мармелад с ароматом спелых плодов и мягкой текстурой",
+      "category": 3,
+      "is_published": true,
+      "is_on_main": true
+    }
+  }
+]

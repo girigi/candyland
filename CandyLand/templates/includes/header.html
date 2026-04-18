@@ -1,0 +1,22 @@
+{% load static %}
+<header class="header-line bg-success text-white px-4 py-3">
+  <h1 id="bgCandy" class="m-0">CandyLand</h1>
+  
+  <nav class="d-flex align-items-center" >
+    <a class="text-decoration-none me-4" href="{% url 'homepage:index' %}">Главная</a>
+    <a class="text-decoration-none" href="{% url 'candy:candy_list' %}">Каталоги</a>
+  </nav>
+
+  <form class="search-form" method="get" action="">
+      <div class="search-box">
+          <input 
+              type="text" 
+              name="q" 
+              placeholder="Поиск сладостей..." 
+              class="search-input"
+          >
+          <button class="search-btn">🔍</button>
+      </div>
+  </form>
+</header>
+<hr class="m-0">
