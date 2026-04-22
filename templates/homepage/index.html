@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Главная
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+
+    <h1 class="mb-4 text-center">🍬 Главная</h1>
+
+    <div class="row">
+      {% for candy in candy_list %}
+        <div class="col-md-4 mb-4">
+          <div class="candy-card h-100">
+
+            <h3 class="candy-title mb-2">
+              {{ candy.title }}
+            </h3>
+
+            <p class="text-muted">
+              Вкусная сладость для настроения ✨
+            </p>
+            <a href="{% url 'candy:candy_detail' candy.id %}" class="btn btn-success mt-2">
+                Подробнее
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  Каталог
+{% endblock %}
+{% block content %}
+  <div class="container">
+    {% for candy in candy_list %}
+      <main class="candy-card">
+        <ing src="{% static 'img/Золотиста карамель в обертке.png' %}">
+        <h2 class="card-title"> {{ candy.title }}</h2>
+        <h4> {{ candy.description }}</h4>
+        <a href="{% url 'candy:candy_detail' candy.id %}">
+          Подробнее
+        </a>
+    </main>
+    {% endfor %}
+    </div>
+{% endblock  %}
