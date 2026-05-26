@@ -1,4 +1,4 @@
-{% load static %}
+{% comment %} {% load static %}
 <header class="header-line bg-success text-white px-4 py-3">
   <h1 id="bgCandy" class="m-0">CandyLand</h1>
   
@@ -19,4 +19,32 @@
       </div>
   </form>
 </header>
-<hr class="m-0">
+<hr class="m-0"> {% endcomment %}
+
+{% comment %} {% load static %}
+<header class="header-line bg-success text-white px-4 py-3">
+  <h1 id="bgCandy" class="m-0">CandyLand</h1>
+  
+  <nav class="d-flex align-items-center">
+    <a class="text-decoration-none me-4" href="{% url 'homepage:index' %}">Главная</a>
+    <a class="text-decoration-none" href="{% url 'candy:candy_list' %}">Каталоги</a>
+  </nav>
+
+  <form class="search-form" method="get" action="{% url 'candy:candy_list' %}">
+      <div class="search-box">
+          <input 
+              type="text" 
+              name="q" 
+              placeholder="Поиск сладостей..." 
+              class="search-input"
+          >
+          <button type="submit" class="search-btn">🔍</button>
+      </div>
+  </form>
+</header> {% endcomment %}
+
+<!-- template/includes/header.html -->
+{% load static %}
+<header style="background: #2d1b2e; padding: 10px;">
+    <p style="color:white; text-align:center;">🍬 Сладкий заголовок для специфичных страниц 🍦</p>
+</header>

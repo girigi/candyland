@@ -7,8 +7,18 @@ from django.db.models import Q
 
 def index(request):
     template = 'homepage/index.html'
-    candy_list = Candies.objects.values(
-        'id', 'title', 'description'
-        ).filter(is_on_main=True, is_published=True)
-    context = {'candy_list': candy_list}
+    query = request.GET.get('q')
+    candy_list = Candies.objects.filter(is_published=True)
+    if query:
+        candy_list = candy_list.filter(
+            Q(title__icontains = query) |
+            Q(description__icontains = query)
+        )
+    else:
+        candy_list = candy_list.filter(is_on_main=True)
+
+    context = {
+        'candy_list': candy_list,
+        'query': query
+    }
     return render(request, template, context)

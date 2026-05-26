@@ -1,4 +1,4 @@
-{% load static %}
+{% comment %} {% load static %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -19,5 +19,208 @@
 
 {% include "includes/footer.html" %}
 
+</body>
+</html> {% endcomment %}
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CandyLand - {% block title %}Магазин сладостей и мороженого{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fdf8f0 0%, #ffe6f0 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ШАПКА */
+        .top-bar {
+            background: #2d1b2e;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            color: #ffd966;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-form {
+            display: flex;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 30px 0 0 30px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-btn {
+            background: #ff6b6b;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 0 30px 30px 0;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .search-btn:hover {
+            background: #e05555;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-login, .btn-register {
+            padding: 8px 18px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-login {
+            background: transparent;
+            border: 1px solid #ffd966;
+            color: #ffd966;
+        }
+
+        .btn-login:hover {
+            background: #ffd966;
+            color: #2d1b2e;
+        }
+
+        .btn-register {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+        }
+
+        .btn-register:hover {
+            background: #ff4757;
+            transform: scale(1.02);
+        }
+
+        /* ОСНОВНОЙ КОНТЕНТ */
+        .content {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        /* ПОДВАЛ */
+        footer {
+            background: #2d1b2e;
+            color: #ccc;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .top-bar {
+                flex-direction: column;
+            }
+            .search-container {
+                width: 100%;
+                max-width: 100%;
+            }
+            .auth-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .profile-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .profile-btn:hover {
+            transform: scale(1.08);
+        }
+
+        .profile-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="top-bar">
+        <div class="logo">
+            <h1>🍭 CandyLand</h1>
+        </div>
+        <div class="search-container">
+            <form class="search-form" action="{% url 'homepage:index' %}" method="get">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    name="q" 
+                    placeholder="Поиск мороженого, конфет..." >
+                <button type="submit" class="search-btn">🔍 Найти</button>
+                {% if query %}
+                    {% comment %} <a href="{% url 'homepage:index' %}">❌ сброс</a> {% endcomment %}
+                {% endif %}
+            </form>
+        </div>
+        <div class="auth-buttons">
+            <a href="/login/" class="profile-btn">
+                <img src="{% static 'img/profile.png' %}" alt="Профиль">  
+            </a>
+        </div>
+    </div>
+
+    <main class="content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% include 'includes/footer.html' %}
 </body>
 </html>

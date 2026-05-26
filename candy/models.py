@@ -19,8 +19,12 @@ class Category(PublishedModel, models.Model):
 class Candies(PublishedModel, models.Model):
     is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
     is_on_main = models.BooleanField(default=True, verbose_name='На главной')
-    title = models.CharField(max_length=128, verbose_name='Название')
+    title = models.CharField(max_length=128, verbose_name='Название')   
     description = models.TextField(verbose_name='Описание')
+    price = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Цена', default=10.0)
+    image = models.ImageField(upload_to='candies/', blank=True, null=True, verbose_name='Изображение')
+    ingredients = models.TextField(default='Не указан')
+    weight = models.SmallIntegerField(default=0)
 
     category = models.ForeignKey(
         Category,

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}О магазине CandyLand{% endblock %}
+
+{% block content %}
+<style>
+    .about-box {
+        background: white;
+        border-radius: 40px;
+        padding: 40px;
+        text-align: center;
+    }
+    .about-box h1 {
+        color: #ff6b6b;
+        font-size: 2.5rem;
+    }
+    .about-text {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 30px auto;
+    }
+</style>
+<div class="about-box">
+    <h1>🍭 О CandyLand</h1>
+    <div class="about-text">
+        <p>Мы создаём счастье в каждой конфете и каждом шарике мороженого с 2020 года.</p>
+        <p>Натуральные ингредиенты, ручная работа и безграничная любовь к сладостям — вот наш рецепт.</p>
+        <p>✨ Попробуйте наше фирменное «Радужное мороженое» и конфеты «Сладкая феерия» ✨</p>
+    </div>
+    <img src="https://via.placeholder.com/600x300?text=CandyLand+Shop" style="border-radius: 30px; max-width:100%;">
+</div>
+{% endblock %}

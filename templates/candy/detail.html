@@ -1,4 +1,5 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% comment %} {% extends "base.html" %}
 {% load static %}
 {% block title %}
   <h3>Конфета {{ candy_detail.title }}</h3>
@@ -6,4 +7,89 @@
 
 {% block content %}
   <p class="">{{ candy_detail.description }}
-{% endblock  %}
+{% endblock  %} {% endcomment %}
+
+
+
+{% block title %}{{ candy_detail.title }} | CandyLand{% endblock %}
+
+{% block content %}
+<style>
+    .detail-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+        background: white;
+        border-radius: 40px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    .detail-img {
+        flex: 1;
+        min-width: 250px;
+    }
+    .detail-img img {
+        width: 100%;
+        border-radius: 30px;
+        object-fit: cover;
+    }
+    .detail-info {
+        flex: 1;
+    }
+    .detail-info h1 {
+        font-size: 2.5rem;
+        color: #3e1a3e;
+    }
+    .price-big {
+        font-size: 2rem;
+        color: #ff6b6b;
+        margin: 20px 0;
+        font-weight: bold;
+    }
+    .description {
+        font-size: 1.1rem;
+        line-height: 1.5;
+        color: #444;
+        margin: 20px 0;
+    }
+    .add-to-cart {
+        background: #ff6b6b;
+        border: none;
+        padding: 14px 30px;
+        color: white;
+        font-size: 1.2rem;
+        border-radius: 50px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: #ff6b6b;
+        text-decoration: none;
+    }
+</style>
+
+<div class="detail-container">
+    <div class="detail-img">
+        <img src="{{ candy_detail.image.url }}" alt="{{ candy_detail.title }}">
+    </div>
+    <div class="detail-info">
+        <h1>{{ candy_detail.title }}</h1>
+        <div class="price-big">{{ candy_detail.price }} ₽</div>
+        <div class="description">
+            <strong>Описание:</strong><br>
+            {{ candy_detail.description }}
+        </div>
+        {% if candy_detail.ingredients %}
+        <p><strong>🍨 Состав:</strong> {{ candy_detail.ingredients }}</p>
+        {% endif %}
+        {% if candy_detail.weight %}
+        <p><strong>⚖️ Вес:</strong> {{ candy_detail.weight }} г</p>
+        {% endif %}
+        <button class="add-to-cart">📦 Добавить в корзину</button>
+        <br>
+        <a href="{% url "homepage:index" %}" class="back-link">← Назад к списку</a>
+    </div>
+</div>
+{% endblock %}
