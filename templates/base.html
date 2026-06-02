@@ -210,9 +210,18 @@
             </form>
         </div>
         <div class="auth-buttons">
-            <a href="/login/" class="profile-btn">
-                <img src="{% static 'img/profile.png' %}" alt="Профиль">  
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile:profile_view' %}" class="profile-btn">
+                    <img src="{% static 'img/profile.jpg' %}" alt="Профиль">  
+                </a>
+            {% else %}
+                <!-- Если пользователь не вошел, отправляем его на страницу логина -->
+                <a href="{% url 'login' %}" class="profile-btn">Войти</a>
+            {% endif %}
+            {% comment %} <a href="{% url 'users:cart_view' %}" class="profile-btn">
+                <img src="{% static 'img/profile.jpg' %}" alt="Карзина">   {% endcomment %}
             </a>
+            
         </div>
     </div>
 
