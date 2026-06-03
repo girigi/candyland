@@ -1,4 +1,5 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% comment %} {% extends "base.html" %}
 {% load static %}
 {% block title %}
   Каталог
@@ -16,4 +17,119 @@
     </main>
     {% endfor %}
     </div>
-{% endblock  %}
+{% endblock  %} {% endcomment %}
+
+
+
+{% block title %}Все сладости | CandyLand{% endblock %}
+
+{% block content %}
+<style>
+    .filter-bar {
+        background: white;
+        padding: 15px;
+        border-radius: 30px;
+        margin-bottom: 30px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .filter-bar a {
+        background: #f0e4d0;
+        padding: 6px 18px;
+        border-radius: 20px;
+        text-decoration: none;
+        color: #2d1b2e;
+    }
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+    .product-card {
+        background: white;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s;
+    }
+    .product-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+    .product-img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+    }
+    .info {
+        padding: 18px;
+    }
+    .price {
+        font-size: 1.5rem;
+        color: #e67e22;
+        font-weight: bold;
+    }
+    .btn {
+        background: #ff6b6b;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 40px;
+        display: inline-block;
+        margin-top: 12px;
+        text-decoration: none;
+    }
+    h1 {
+        margin-bottom: 20px;
+        color: #3e1a3e;
+    }
+
+    .btn-detail {
+        display: inline-block;
+        background: #ff6b6b;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        margin-top: 12px;
+        transition: 0.3s;
+        text-align: center;
+    }
+
+    .btn-detail:hover {
+        background: #e74c3c;
+        transform: scale(1.05);
+    }
+
+</style>
+
+<h1>🍬 Весь ассортимент</h1>
+
+<div class="filter-bar">
+    <a href="?category=icecream">🍦 Мороженое</a>
+    <a href="?category=candy">🍬 Конфеты</a>
+    <a href="?category=cake">🍰 Торты</a>
+    <a href="/candy/list/">Все товары</a>
+</div>
+
+<div class="product-grid">
+    {% for candy in candy_list %}
+    <div class="product-card">
+        {% if candy.image %}
+            <img class="product-img" src="{{ candy.image.url }}" alt="{{ candy.title }}">
+        {% else %}
+            <img class="product-img" src="https://via.placeholder.com/300x200?text=No+Image" alt="No image">
+        {% endif %}
+        <div class="info">
+            <h3>{{ candy.title }}</h3>
+            <p>{{ candy.description|slice:":100" }}...</p>
+            <div class="price">{{ candy.price }} ₽</div>
+            <a href="{% url 'candy:candy_detail' candy.id %}" class="btn-detail">Смотреть</a>
+        </div>
+    </div>
+    {% empty %}
+    <p>Товары не найдены.</p>
+    {% endfor %}
+</div>
+{% endblock %}

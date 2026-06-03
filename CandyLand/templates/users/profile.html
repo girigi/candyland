@@ -1,0 +1,650 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль пользователя: {{ page_user.username }} | CandyLand{% endblock %}
+
+{% block content %}
+<style>
+    .profile-wrapper {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .profile-card {
+        background: white;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    /* Левая часть с аватаром */
+    .profile-left {
+        flex: 1;
+        min-width: 280px;
+        background: linear-gradient(135deg, #ffd966 0%, #ffb347 100%);
+        padding: 40px 30px;
+        text-align: center;
+    }
+
+    .avatar-container {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+    .avatar-image {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid white;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        background: white;
+    }
+
+    .avatar-placeholder {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        border: 5px solid white;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        margin: 0 auto;
+    }
+
+    .avatar-edit-btn {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        background: #ff6b6b;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: white;
+        transition: 0.3s;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .avatar-edit-btn:hover {
+        background: #e05555;
+        transform: scale(1.05);
+    }
+
+    .profile-username {
+        color: white;
+        font-size: 1.8rem;
+        margin: 15px 0 5px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .profile-member-since {
+        color: rgba(255,255,255,0.9);
+        font-size: 0.85rem;
+    }
+
+    /* Правая часть с данными */
+    .profile-right {
+        flex: 2;
+        min-width: 300px;
+        padding: 40px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        color: #2d1b2e;
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid #ffd966;
+        display: inline-block;
+    }
+
+    .info-group {
+        margin-bottom: 30px;
+    }
+
+    .info-field {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .info-label {
+        width: 130px;
+        font-weight: bold;
+        color: #2d1b2e;
+        padding-top: 12px;
+    }
+
+    .info-value {
+        flex: 1;
+        background: #f8f4f0;
+        padding: 10px 15px;
+        border-radius: 12px;
+        color: #333;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .info-text {
+        word-break: break-all;
+    }
+
+    .edit-field-btn {
+        background: none;
+        border: none;
+        color: #ff6b6b;
+        cursor: pointer;
+        font-size: 0.85rem;
+        padding: 5px 10px;
+        border-radius: 20px;
+        transition: 0.3s;
+    }
+
+    .edit-field-btn:hover {
+        background: #ffebee;
+    }
+
+    /* Форма редактирования */
+    .edit-form {
+        display: none;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .edit-form.active {
+        display: block;
+    }
+
+    .edit-input {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #ffd966;
+        border-radius: 12px;
+        font-size: 1rem;
+        margin-bottom: 10px;
+        outline: none;
+    }
+
+    .edit-input:focus {
+        border-color: #ff6b6b;
+    }
+
+    .edit-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .save-btn {
+        background: #6bcf7f;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+    }
+
+    .cancel-btn {
+        background: #ddd;
+        color: #333;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+    }
+
+    /* Статистика */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 15px;
+        margin: 30px 0;
+    }
+
+    .stat-card {
+        background: #f8f4f0;
+        text-align: center;
+        padding: 15px;
+        border-radius: 20px;
+    }
+
+    .stat-number {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #ff6b6b;
+    }
+
+    .stat-label {
+        color: #666;
+        font-size: 0.85rem;
+        margin-top: 5px;
+    }
+
+    /* Кнопки действий */
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 30px;
+    }
+
+    .btn-primary {
+        background: #ff6b6b;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 30px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 1rem;
+    }
+
+    .btn-secondary {
+        background: #ffd966;
+        color: #2d1b2e;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 30px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .logout-btn {
+        background: transparent;
+        border: 2px solid #ff6b6b;
+        color: #ff6b6b;
+        padding: 12px 25px;
+        border-radius: 30px;
+        cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+        .info-field {
+            flex-direction: column;
+        }
+        .info-label {
+            width: auto;
+            margin-bottom: 5px;
+        }
+        .profile-card {
+            border-radius: 20px;
+        }
+        .profile-left {
+            padding: 30px 20px;
+        }
+        .profile-right {
+            padding: 25px;
+        }
+    }
+</style>
+
+<div class="profile-wrapper">
+    <div class="profile-card">
+        <!-- ЛЕВАЯ ЧАСТЬ: АВАТАР -->
+        <div class="profile-left">
+            <div class="avatar-container">
+                {% if page_user.avatar %}
+                    <img class="avatar-image" src="{{ page_user.avatar.url }}" alt="Аватар {{ page_user.username }}">
+                {% else %}
+                    <div class="avatar-placeholder">
+                        🍭
+                    </div>
+                {% endif %}
+                <button class="avatar-edit-btn" onclick="openAvatarUpload()" title="Изменить аватар">
+                    ✏️
+                </button>
+            </div>
+            <div class="profile-username">{{ page_user.username }}</div>
+            <div class="profile-member-since">
+                🍬 Участник с {{ page_user.date_joined|date:"F Y" }}
+            </div>
+        </div>
+
+        <!-- ПРАВАЯ ЧАСТЬ: ДАННЫЕ ПОЛЬЗОВАТЕЛЯ -->
+        <div class="profile-right">
+            <h2 class="section-title">👤 Личные данные</h2>
+            
+            <div class="info-group">
+                <!-- Username -->
+                <div class="info-field">
+                    <div class="info-label">📝 Username:</div>
+                    <div class="info-value">
+                        <span class="info-text" id="username-display">{{ page_user.username }}</span>
+                        <button class="edit-field-btn" onclick="showEditForm('username')">Изменить</button>
+                    </div>
+                    <div id="edit-username-form" class="edit-form">
+                        <input type="text" id="username-input" class="edit-input" value="{{ page_user.username }}" placeholder="Имя пользователя">
+                        <div class="edit-actions">
+                            <button class="save-btn" onclick="saveField('username')">Сохранить</button>
+                            <button class="cancel-btn" onclick="hideEditForm('username')">Отмена</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="info-field">
+                    <div class="info-label">📧 Email:</div>
+                    <div class="info-value">
+                        <span class="info-text" id="email-display">{{ page_user.email|default:"Не указан" }}</span>
+                        <button class="edit-field-btn" onclick="showEditForm('email')">Изменить</button>
+                    </div>
+                    <div id="edit-email-form" class="edit-form">
+                        <input type="email" id="email-input" class="edit-input" value="{{ page_user.email|default:'' }}" placeholder="example@mail.com">
+                        <div class="edit-actions">
+                            <button class="save-btn" onclick="saveField('email')">Сохранить</button>
+                            <button class="cancel-btn" onclick="hideEditForm('email')">Отмена</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Имя (first_name) -->
+                <div class="info-field">
+                    <div class="info-label">👋 Имя:</div>
+                    <div class="info-value">
+                        <span class="info-text" id="firstname-display">{{ page_user.first_name|default:"Не указано" }}</span>
+                        <button class="edit-field-btn" onclick="showEditForm('firstname')">Изменить</button>
+                    </div>
+                    <div id="edit-firstname-form" class="edit-form">
+                        <input type="text" id="firstname-input" class="edit-input" value="{{ page_user.first_name|default:'' }}" placeholder="Ваше имя">
+                        <div class="edit-actions">
+                            <button class="save-btn" onclick="saveField('firstname')">Сохранить</button>
+                            <button class="cancel-btn" onclick="hideEditForm('firstname')">Отмена</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Фамилия (last_name) -->
+                <div class="info-field">
+                    <div class="info-label">📛 Фамилия:</div>
+                    <div class="info-value">
+                        <span class="info-text" id="lastname-display">{{ page_user.last_name|default:"Не указано" }}</span>
+                        <button class="edit-field-btn" onclick="showEditForm('lastname')">Изменить</button>
+                    </div>
+                    <div id="edit-lastname-form" class="edit-form">
+                        <input type="text" id="lastname-input" class="edit-input" value="{{ page_user.last_name|default:'' }}" placeholder="Ваша фамилия">
+                        <div class="edit-actions">
+                            <button class="save-btn" onclick="saveField('lastname')">Сохранить</button>
+                            <button class="cancel-btn" onclick="hideEditForm('lastname')">Отмена</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Дата последнего входа -->
+                <div class="info-field">
+                    <div class="info-label">🕐 Последний вход:</div>
+                    <div class="info-value">
+                        <span class="info-text">{{ page_user.last_login|date:"d.m.Y H:i"|default:"Никогда" }}</span>
+                    </div>
+                </div>
+
+                <!-- Дата регистрации -->
+                <div class="info-field">
+                    <div class="info-label">📅 Дата регистрации:</div>
+                    <div class="info-value">
+                        <span class="info-text">{{ page_user.date_joined|date:"d.m.Y" }}</span>
+                    </div>
+                </div>
+
+                <!-- Статус (активен/не активен) -->
+                <div class="info-field">
+                    <div class="info-label">✅ Статус:</div>
+                    <div class="info-value">
+                        <span class="info-text">
+                            {% if page_user.is_active %}
+                                <span style="color: #6bcf7f;">Активен</span>
+                            {% else %}
+                                <span style="color: #ff6b6b;">Не активен</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Суперпользователь -->
+                <div class="info-field">
+                    <div class="info-label">👑 Права:</div>
+                    <div class="info-value">
+                        <span class="info-text">
+                            {% if page_user.is_superuser %}
+                                <span style="color: #ffd966;">Администратор</span>
+                            {% elif page_user.is_staff %}
+                                <span style="color: #ffa502;">Модератор</span>
+                            {% else %}
+                                <span style="color: #666;">Пользователь</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Статистика аккаунта (передаётся из view) -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">{{ orders_count|default:"0" }}</div>
+                    <div class="stat-label">Заказов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ reviews_count|default:"0" }}</div>
+                    <div class="stat-label">Отзывов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ favorites_count|default:"0" }}</div>
+                    <div class="stat-label">В избранном</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ cart_items_count|default:"0" }}</div>
+                    <div class="stat-label">В корзине</div>
+                </div>
+            </div>
+
+            <!-- Кнопки действий -->
+            <!-- Кнопки действий (Без JavaScript-функций) -->
+            <div class="action-buttons">
+                <a href="/cart/" class="btn-primary">🛒 Перейти в корзину</a>
+                <a href="/profile/orders/" class="btn-secondary">📦 Мои заказы</a>
+                
+                <!-- Используем форму вместо кнопки с onclick -->
+                <form method="post" action="{% url 'profile:exit_profile' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn" onclick="return confirm('Вы уверены, что хотите выйти?')">
+                        🚪 Выйти
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Форма загрузки аватара (скрытая) -->
+<div id="avatarModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000;">
+    <div style="background:white; padding:30px; border-radius:20px; max-width:400px; margin:20px;">
+        <h3>Загрузить аватар</h3>
+        <input type="file" id="avatarInput" accept="image/*" style="margin:15px 0; width:100%;">
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button onclick="uploadAvatar()" style="background:#ff6b6b; color:white; border:none; padding:10px 20px; border-radius:25px; cursor:pointer;">Загрузить</button>
+            <button onclick="closeAvatarModal()" style="background:#ddd; border:none; padding:10px 20px; border-radius:25px; cursor:pointer;">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Показ формы редактирования поля
+    function showEditForm(field) {
+        hideAllEditForms();
+        const form = document.getElementById(`edit-${field}-form`);
+        if (form) {
+            form.classList.add('active');
+        }
+    }
+
+    function hideEditForm(field) {
+        const form = document.getElementById(`edit-${field}-form`);
+        if (form) {
+            form.classList.remove('active');
+        }
+    }
+
+    function hideAllEditForms() {
+        const forms = document.querySelectorAll('.edit-form');
+        forms.forEach(form => form.classList.remove('active'));
+    }
+
+    // Сохранение полей
+    function saveField(field) {
+        let input, newValue, displaySpan;
+        
+        if (field === 'username') {
+            input = document.getElementById('username-input');
+            newValue = input.value.trim();
+            displaySpan = document.getElementById('username-display');
+            if (newValue.length < 3) {
+                alert('Username должен содержать минимум 3 символа');
+                return;
+            }
+        } else if (field === 'email') {
+            input = document.getElementById('email-input');
+            newValue = input.value.trim();
+            displaySpan = document.getElementById('email-display');
+            if (newValue && !newValue.includes('@')) {
+                alert('Введите корректный email');
+                return;
+            }
+            if (newValue === '') {
+                newValue = 'Не указан';
+            }
+        } else if (field === 'firstname') {
+            input = document.getElementById('firstname-input');
+            newValue = input.value.trim() || 'Не указано';
+            displaySpan = document.getElementById('firstname-display');
+        } else if (field === 'lastname') {
+            input = document.getElementById('lastname-input');
+            newValue = input.value.trim() || 'Не указано';
+            displaySpan = document.getElementById('lastname-display');
+        } else {
+            return;
+        }
+
+        // Здесь должен быть AJAX запрос к серверу
+        console.log(`Сохранение ${field}: ${newValue}`);
+        
+        // Демонстрация обновления на странице
+        if (displaySpan) {
+            displaySpan.textContent = newValue;
+        }
+        
+        // Обновляем username в левой части, если нужно
+        if (field === 'username') {
+            const usernameDisplay = document.querySelector('.profile-username');
+            if (usernameDisplay) usernameDisplay.textContent = newValue;
+        }
+        
+        alert(`Поле "${field}" обновлено на: ${newValue}\n(в реальном проекте данные отправятся на сервер)`);
+        hideEditForm(field);
+    }
+
+    // Аватар
+    function openAvatarUpload() {
+        document.getElementById('avatarModal').style.display = 'flex';
+    }
+
+    function closeAvatarModal() {
+        document.getElementById('avatarModal').style.display = 'none';
+    }
+
+    function uploadAvatar() {
+        const fileInput = document.getElementById('avatarInput');
+        const file = fileInput.files[0];
+        
+        if (!file) {
+            alert('Выберите файл');
+            return;
+        }
+        
+        if (!file.type.startsWith('image/')) {
+            alert('Пожалуйста, выберите изображение');
+            return;
+        }
+        
+        // Здесь должна быть отправка файла на сервер
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const avatarContainer = document.querySelector('.avatar-container');
+            const oldImg = document.querySelector('.avatar-image');
+            const oldPlaceholder = document.querySelector('.avatar-placeholder');
+            
+            if (oldImg) {
+                oldImg.src = e.target.result;
+            } else if (oldPlaceholder) {
+                const newImg = document.createElement('img');
+                newImg.className = 'avatar-image';
+                newImg.src = e.target.result;
+                newImg.alt = 'Аватар {{ page_user.username }}';
+                oldPlaceholder.replaceWith(newImg);
+            }
+            
+            alert('Аватар обновлён! (в реальном проекте изображение загрузится на сервер)');
+        };
+        reader.readAsDataURL(file);
+        
+        closeAvatarModal();
+    }
+
+    // Выход
+    {% comment %} function logout() {
+        if (confirm('Вы уверены, что хотите выйти?')) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/users/logout/'; 
+
+            // Берем токен напрямую из скрытого тега, который мы добавили выше
+            const djangoCsrfInput = document.querySelector('#django-csrf input');
+            
+            if (djangoCsrfInput) {
+                const csrfTokenInput = document.createElement('input');
+                csrfTokenInput.type = 'hidden';
+                csrfTokenInput.name = 'csrfmiddlewaretoken';
+                csrfTokenInput.value = djangoCsrfInput.value;
+                form.appendChild(csrfTokenInput);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    } {% endcomment %}
+
+
+            const csrfTokenInput = document.createElement('input');
+            csrfTokenInput.type = 'hidden';
+            csrfTokenInput.name = 'csrfmiddlewaretoken';
+            csrfTokenInput.value = csrfTokenValue;
+
+            form.appendChild(csrfTokenInput);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+
+
+
+    // Закрытие модалки по клику вне
+    window.onclick = function(event) {
+        const modal = document.getElementById('avatarModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
+{% endblock %}

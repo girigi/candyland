@@ -24,11 +24,13 @@ class CandiesAdmin(admin.ModelAdmin):
         'is_on_main',
         'description',
         'category',
+        'price',
     )
     list_editable = (
         'is_published',
         'is_on_main',
         'category',
+        'price',
     )
 
     empty_value_display = 'Не задано'

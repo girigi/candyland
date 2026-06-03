@@ -1,0 +1,460 @@
+{% comment %} {% extends 'base.html' %}
+
+{% block title %}Корзина | CandyLand{% endblock %}
+
+{% block content %}
+<style>
+    .cart-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .cart-title {
+        font-size: 2rem;
+        color: #2d1b2e;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Таблица корзины */
+    .cart-table {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        margin-bottom: 30px;
+    }
+
+    .cart-header {
+        display: grid;
+        grid-template-columns: 100px 1fr 120px 150px 50px;
+        background: #f8f4f0;
+        padding: 15px 20px;
+        font-weight: bold;
+        color: #2d1b2e;
+        border-bottom: 2px solid #ffd966;
+    }
+
+    .cart-item {
+        display: grid;
+        grid-template-columns: 100px 1fr 120px 150px 50px;
+        padding: 20px;
+        align-items: center;
+        border-bottom: 1px solid #f0e4d0;
+        transition: 0.3s;
+    }
+
+    .cart-item:hover {
+        background: #fffaf5;
+    }
+
+    .cart-item-image img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 12px;
+    }
+
+    .cart-item-title {
+        font-weight: bold;
+        color: #2d1b2e;
+        margin-bottom: 5px;
+    }
+
+    .cart-item-desc {
+        font-size: 0.8rem;
+        color: #999;
+    }
+
+    .cart-item-price {
+        font-weight: bold;
+        color: #ff6b6b;
+    }
+
+    /* Количество */
+    .quantity-control {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .quantity-btn {
+        width: 30px;
+        height: 30px;
+        background: #f0e4d0;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .quantity-btn:hover {
+        background: #ffd966;
+    }
+
+    .quantity-input {
+        width: 50px;
+        text-align: center;
+        padding: 5px;
+        border: 1px solid #ffd966;
+        border-radius: 8px;
+    }
+
+    .cart-item-total {
+        font-weight: bold;
+        color: #2d1b2e;
+        font-size: 1.1rem;
+    }
+
+    .remove-item {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #ff6b6b;
+        transition: 0.3s;
+    }
+
+    .remove-item:hover {
+        color: #e05555;
+        transform: scale(1.1);
+    }
+
+    /* Итого и оформление */
+    .cart-summary {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .promo-section {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .promo-input {
+        padding: 10px 15px;
+        border: 1px solid #ffd966;
+        border-radius: 30px;
+        outline: none;
+        width: 200px;
+    }
+
+    .promo-btn {
+        background: #ffd966;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+    }
+
+    .total-section {
+        text-align: right;
+    }
+
+    .total-text {
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+    .total-amount {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #ff6b6b;
+        margin: 5px 0;
+    }
+
+    .checkout-btn {
+        background: #ff6b6b;
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        font-size: 1.1rem;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 10px;
+    }
+
+    .checkout-btn:hover {
+        background: #e05555;
+        transform: scale(1.02);
+    }
+
+    /* Пустая корзина */
+    .empty-cart {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 20px;
+    }
+
+    .empty-cart h3 {
+        font-size: 1.8rem;
+        color: #ffd966;
+        margin-bottom: 15px;
+    }
+
+    .empty-cart p {
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+    .continue-shopping {
+        display: inline-block;
+        background: #ff6b6b;
+        color: white;
+        padding: 12px 30px;
+        text-decoration: none;
+        border-radius: 50px;
+        transition: 0.3s;
+    }
+
+    .continue-shopping:hover {
+        background: #e05555;
+    }
+
+    /* Рекомендации */
+    .recommendations {
+        margin-top: 40px;
+    }
+
+    .recommendations h3 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #2d1b2e;
+    }
+
+    .rec-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .rec-item {
+        background: white;
+        border-radius: 15px;
+        padding: 15px;
+        text-align: center;
+        transition: 0.3s;
+    }
+
+    .rec-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .rec-item img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .rec-item h4 {
+        margin: 10px 0;
+        font-size: 1rem;
+    }
+
+    .rec-price {
+        color: #ff6b6b;
+        font-weight: bold;
+    }
+
+    .add-to-cart-small {
+        background: #ffd966;
+        border: none;
+        padding: 5px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+        margin-top: 8px;
+    }
+
+    @media (max-width: 768px) {
+        .cart-header {
+            display: none;
+        }
+        .cart-item {
+            grid-template-columns: 1fr;
+            gap: 10px;
+            text-align: center;
+        }
+        .cart-item-image {
+            text-align: center;
+        }
+        .quantity-control {
+            justify-content: center;
+        }
+        .remove-item {
+            justify-self: center;
+        }
+        .cart-summary {
+            flex-direction: column;
+            text-align: center;
+        }
+        .promo-section {
+            justify-content: center;
+        }
+        .total-section {
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="cart-container">
+    <div class="cart-title">
+        🛒 Корзина товаров
+        <span style="font-size: 1rem; color: #999;">({{ cart_items|length }} товаров)</span>
+    </div>
+
+    {% if cart_items %}
+        <!-- Таблица корзины -->
+        <div class="cart-table">
+            <div class="cart-header">
+                <div>Товар</div>
+                <div>Название</div>
+                <div>Цена</div>
+                <div>Количество</div>
+                <div>Итого</div>
+            </div>
+
+            {% for item in cart_items %}
+            <div class="cart-item" data-id="{{ item.id }}">
+                <div class="cart-item-image">
+                    <img src="{{ item.image|default:'https://via.placeholder.com/80x80?text=No+Image' }}" alt="{{ item.name }}">
+                </div>
+                <div>
+                    <div class="cart-item-title">{{ item.name }}</div>
+                    <div class="cart-item-desc">{{ item.description|truncatechars:50 }}</div>
+                </div>
+                <div class="cart-item-price">{{ item.price }} ₽</div>
+                <div>
+                    <div class="quantity-control">
+                        <button class="quantity-btn" onclick="changeQuantity({{ item.id }}, -1)">−</button>
+                        <input type="number" class="quantity-input" value="{{ item.quantity }}" min="1" max="99" data-id="{{ item.id }}" onchange="updateQuantity({{ item.id }}, this.value)">
+                        <button class="quantity-btn" onclick="changeQuantity({{ item.id }}, 1)">+</button>
+                    </div>
+                </div>
+                <div>
+                    <div class="cart-item-total">{{ item.total }} ₽</div>
+                    <button class="remove-item" onclick="removeFromCart({{ item.id }})" title="Удалить">🗑️</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Сводка -->
+        <div class="cart-summary">
+            <div class="promo-section">
+                <input type="text" class="promo-input" placeholder="Промокод" id="promoCode">
+                <button class="promo-btn" onclick="applyPromo()">Применить</button>
+                {% if discount %}
+                <div style="color: #6bcf7f;">✓ Промокод применён: -{{ discount }}%</div>
+                {% endif %}
+            </div>
+            <div class="total-section">
+                <div class="total-text">Сумма заказа:</div>
+                <div class="total-amount">{{ total_amount }} ₽</div>
+                {% if discount %}
+                <div style="color: #6bcf7f;">Скидка: -{{ discount_amount }} ₽</div>
+                <div class="total-amount" style="font-size: 1.5rem;">Итого: {{ final_amount }} ₽</div>
+                {% endif %}
+                <button class="checkout-btn" onclick="checkout()">Оформить заказ →</button>
+            </div>
+        </div>
+
+        <!-- Рекомендуемые товары -->
+        <div class="recommendations">
+            <h3>✨ Вам также может понравиться</h3>
+            <div class="rec-grid">
+                {% for rec in recommendations %}
+                <div class="rec-item">
+                    <img src="{{ rec.image|default:'https://via.placeholder.com/150x120?text=Recommended' }}" alt="{{ rec.name }}">
+                    <h4>{{ rec.name }}</h4>
+                    <div class="rec-price">{{ rec.price }} ₽</div>
+                    <button class="add-to-cart-small" onclick="addToCart({{ rec.id }})">В корзину</button>
+                </div>
+                {% empty %}
+                <p>Нет рекомендаций</p>
+                {% endfor %}
+            </div>
+        </div>
+
+    {% else %}
+        <!-- Пустая корзина -->
+        <div class="empty-cart">
+            <h3>🍬 Ваша корзина пуста</h3>
+            <p>Но у нас есть много вкусностей, которые вас ждут!</p>
+            <a href="/candy/list/" class="continue-shopping">🍦 Продолжить покупки</a>
+        </div>
+
+        <!-- Хиты продаж -->
+        <div class="recommendations">
+            <h3>🔥 Хиты продаж CandyLand</h3>
+            <div class="rec-grid">
+                {% for hit in popular_products %}
+                <div class="rec-item">
+                    <img src="{{ hit.image|default:'https://via.placeholder.com/150x120?text=Popular' }}" alt="{{ hit.name }}">
+                    <h4>{{ hit.name }}</h4>
+                    <div class="rec-price">{{ hit.price }} ₽</div>
+                    <button class="add-to-cart-small" onclick="addToCart({{ hit.id }})">Купить</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    // Функции для работы с корзиной (имитация API)
+    function changeQuantity(productId, delta) {
+        let input = document.querySelector(`.quantity-input[data-id="${productId}"]`);
+        let newVal = parseInt(input.value) + delta;
+        if (newVal >= 1 && newVal <= 99) {
+            updateQuantity(productId, newVal);
+        }
+    }
+
+    function updateQuantity(productId, quantity) {
+        // Здесь должен быть AJAX запрос к серверу
+        console.log(`Обновить товар ${productId} количество: ${quantity}`);
+        alert(`Количество товара изменено на ${quantity} (демо-режим)`);
+        // В реальном проекте: fetch('/cart/update/', {method: 'POST', body: ...})
+        location.reload(); // для демо обновляем страницу
+    }
+
+    function removeFromCart(productId) {
+        if (confirm('Удалить товар из корзины?')) {
+            console.log(`Удалить товар ${productId}`);
+            alert('Товар удалён (демо)');
+            location.reload();
+        }
+    }
+
+    function applyPromo() {
+        let promo = document.getElementById('promoCode').value;
+        alert(`Промокод "${promo}" применён! (демо-режим)`);
+    }
+
+    function checkout() {
+        alert('Переход к оформлению заказа. В реальном проекте здесь будет форма заказа.');
+        window.location.href = '/checkout/';
+    }
+
+    function addToCart(productId) {
+        alert(`Товар ${productId} добавлен в корзину!`);
+        // Здесь AJAX запрос на добавление
+    }
+</script>
+{% endblock %} {% endcomment %}

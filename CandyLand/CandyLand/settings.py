@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-5&lmi&w*ytv4pvyf3ukta47kh!w5#y71d0z@lxac5usm63nmik'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -33,13 +33,14 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'candy.apps.CandyConfig',
     'homepage.apps.HomepageConfig',
+    'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
+    # 'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -50,12 +51,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 INTERNAL_IPS = [
     '127.0.0.1',
-]
+]   
 
 ROOT_URLCONF = 'CandyLand.urls'
 
@@ -129,6 +130,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'static_dev'
 ]
@@ -137,3 +140,13 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# LOGOUT_REDIRECT_URL = 'login'
+
+# Пишем строго КАПСОМ, без кавычек в названиях переменных
+LOGIN_REDIRECT_URL = '/users/my-profile/'
+LOGIN_URL = '/accounts/login/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'

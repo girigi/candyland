@@ -16,7 +16,7 @@ def candy_list(request):
             'description')
     if query:
         candy_list = Candies.objects.filter(title__contains=query, is_published=True)
-        context = {'candy_list': candy_list}
+    context = {'candy_list': candy_list}
     return render(request, template, context)
 
 
