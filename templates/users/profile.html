@@ -289,6 +289,16 @@
             padding: 25px;
         }
     }
+
+    .btn-detail {
+        display: inline-block;
+        background: #ffd966;
+        color: #2d1b2e;
+        padding: 8px 16px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: bold;
+    }
 </style>
 
 <div class="profile-wrapper">
@@ -462,6 +472,7 @@
                         🚪 Выйти
                     </button>
                 </form>
+                <a href="{% url 'homepage:index' candy.id %}" class="btn-detail">К списку товаров</a>
             </div>
 
         </div>
